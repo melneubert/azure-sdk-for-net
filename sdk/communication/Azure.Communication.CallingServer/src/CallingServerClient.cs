@@ -44,12 +44,26 @@ namespace Azure.Communication.CallingServer
                   Argument.CheckNotNull(options, nameof(options)))
         { }
 
+        /// <summary> Initializes a new instance of <see cref="CallingServerClient"/>.</summary>
+        /// <param name="endpoint">Endpoint string acquired from the Azure Communication Services resource.</param>
+        /// <param name="tokenCredential">The TokenCredential used to authenticate requests, such as DefaultAzureCredential.</param>
+        /// <param name="options">Client option exposing <see cref="ClientOptions.Diagnostics"/>, <see cref="ClientOptions.Retry"/>, <see cref="ClientOptions.Transport"/>, etc.</param>
+        public CallingServerClient(string endpoint, TokenCredential tokenCredential, CallingServerClientOptions options = default)
+            : this(
+                  new Uri(Argument.CheckNotNull(endpoint, nameof(endpoint))),
+                  Argument.CheckNotNull(tokenCredential, nameof(tokenCredential)),
+                  options ?? new CallingServerClientOptions())
+        { }
         #endregion
 
         #region private constructors
 
         private CallingServerClient(ConnectionString connectionString, CallingServerClientOptions options)
             : this(connectionString.GetRequired("endpoint"), options.BuildHttpPipeline(connectionString), options)
+        { }
+
+        private CallingServerClient(Uri endpoint, TokenCredential tokenCredential, CallingServerClientOptions options)
+            : this(endpoint.AbsoluteUri, options.BuildHttpPipeline(tokenCredential), options)
         { }
 
         private CallingServerClient(string endpoint, HttpPipeline httpPipeline, CallingServerClientOptions options)
