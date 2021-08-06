@@ -388,7 +388,7 @@ namespace Azure.Communication.CallingServer.Tests
         protected async Task SleepIfNotInPlaybackModeAsync(int milliSeconds = 10000)
         {
             if (TestEnvironment.Mode != RecordedTestMode.Playback)
-                await Task.Delay(20000);
+                await Task.Delay(10000);
         }
 
         protected void SleepInTest(int milliSeconds)
